@@ -1,0 +1,28 @@
+python: _lxa.so ;
+
+include Makefile
+
+PY_H_DIR = /usr/include/python2.5
+
+# Note: swig does not handle the -MP option, so we omit it.
+# If a header is removed from the project, run
+# "rm lxa_wrap.cxx .lxa_wrap.cxx.d" by hand to get lxa_wrap.cxx
+# to rebuild.
+
+swig_dep_args = -MF .$@.d -MMD
+
+SWIG_CFLAGS := $(filter -D% -I%,$(ALL_CFLAGS)) -I$(PY_H_DIR)
+
+lxa_wrap.cxx: lxa.i
+	swig -c++ $(swig_dep_args) $(SWIG_CFLAGS) -Iswig -python lxa.i
+
+lxa_wrap.o: lxa_wrap.cxx
+	$(quiet_compile) $(CXX) -c $< $(dep_args) -I$(PY_H_DIR) $(ALL_CFLAGS)
+
+_lxa.so: lxa_wrap.o $(OBJECTS)
+	$(quiet_link) $(CXX) -shared -o $@ lxa_wrap.o \
+		$(OBJECTS) $(ALL_LDFLAGS) $(LIBS)
+
+swigclean:
+	rm -f _lxa.so lxa_wrap.cxx lxa_wrap.o lxa.py lxa.pyc
+	rm -f .lxa_wrap.cxx.d .lxa_wrap.o.d

@@ -1,0 +1,44 @@
+Installation instructions
+-------------------------
+
+To build, where “make” is the command for GNU make, run
+
+	$ make linguistica
+
+If you have trouble, run
+
+	$ make V=1 linguistica
+
+to see what commands make is trying to run and read the comments at
+the beginning of the Makefile on how to change them.  Please also
+contact us in this case, so we can fix the problem.
+
+On Mac OS X, running “make linguistica.app” builds an application bundle
+with a nice icon.
+
+After the build, the executable can be run from any directory.
+
+Dependencies
+------------
+
+  - The pkg-config [1] command is used to determine the paths to
+    libraries.
+
+    If you do not want to use pkg-config, you can tell “make” the
+    relevant paths on the command line.  See the comments near the
+    beginning of Makefile for more on this.
+
+  - Qt 4 [2] is used for Unicode support and to provide a GUI.
+    Version 4.4 or later is recommended, since earlier versions
+    have broken pkg-config files.
+
+  - If found at build time, the GraphVizContext library [3] is used
+    to display the discovered model of morphology as a finite-state
+    machine.
+
+    To disable this feature, pass “NO_GRAPHVIZ=YesPlease” on the
+    “make” command line.
+
+[1] http://pkg-config.freedesktop.org/
+[2] http://qt.nokia.com/
+[3] http://www.graphviz.org/
